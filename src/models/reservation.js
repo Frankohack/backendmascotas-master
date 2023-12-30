@@ -77,6 +77,7 @@ async function traerHistorialMedico(idDoctor) {
       usuario: reserva.userId,
       mascota: reserva.mascotaId,
       descripcion: reserva.descripcion,
+      hora: reserva.hora,
     };
   });
 

@@ -44,9 +44,9 @@ router.post('/trabajador', async function (req, res) {
   const respuestaObtener = await obtenerTrabajador(correo, contrasena);
 
   if (respuestaObtener) {
-    res.json({ existe: true });
+    res.json({ id: respuestaObtener._id });
   } else {
-    res.json({ existe: false });
+    res.json(null);
   }
 });
 

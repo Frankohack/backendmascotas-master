@@ -6,6 +6,10 @@ const doctorSchema = new mongoose.Schema({
   correo: String,
   especialidad: String,
   rut: String,
+  contrasena: {
+    type: String,
+    required: true,
+  },
 });
 
 module.exports = mongoose.model('Doctor', doctorSchema);

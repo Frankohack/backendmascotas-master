@@ -1,3 +1,4 @@
+const doctor = require('../schemas/doctor');
 const Trabajador = require('../schemas/trabajador');
 
 async function createTrabajador(nombres, apellidos, correo, especialidad, rut, contrasena) {
@@ -6,8 +7,8 @@ async function createTrabajador(nombres, apellidos, correo, especialidad, rut, c
 }
 
 async function obtenerTrabajador(user, password) {
-  const respuesta = await Trabajador.findOne({correo: user, contrasena: password})
-  return respuesta
+  const respuesta = await doctor.findOne({ correo: user, contrasena: password });
+  return respuesta;
 }
 
 module.exports = { createTrabajador, obtenerTrabajador };
