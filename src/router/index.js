@@ -1,19 +1,23 @@
-const {createDoctor, getDoctors} = require('../models/doctor')
-const {Router} = require('express')
-const {crearUsuario, obtenerUsuario} = require('../models/usuario')
-const {createReservation, getReservationsWithDetails} = require('../models/reservation')
+const { createDoctor, getDoctors } = require('../models/doctor');
+const { Router } = require('express');
+const { crearUsuario } = require('../models/usuario');
+const { createReservation, getReservationsWithDetails } = require('../models/reservation');
 const { createTrabajador, obtenerTrabajador } = require('../models/trabajador');
-const {createMedicalRecord, getMedicalRecords} = require('../models/MedicalRecord');
-const {obtenerReservaConDetalles, obtenerReservasPorUsuario, obtenerReservasPorDoctor} = require('../controller/reservation.controller');
+const {
+  obtenerReservaConDetalles,
+  obtenerReservasPorUsuario,
+  obtenerReservasPorDoctor,
+  traerHistorialMedicoController,
+  agregarDescripcionAReservaController,
+} = require('../controller/reservation.controller');
 const { traerMascotasUsuarioController } = require('../controller/mascotas');
 const Usuario = require('../schemas/usuario');
-const router = new Router()
+const router = new Router();
 
-router.post('/login', async function(req, res) {
+router.post('/login', async function (req, res) {
   const { correo, contrasena } = req.body;
   const usuario = await Usuario.findOne({ correo, contrasena });
   if (usuario) {
-    
     res.json({ userId: usuario._id });
   } else {
     res.status(401).send('Credenciales incorrectas');
@@ -22,11 +26,11 @@ router.post('/login', async function(req, res) {
 
 router.get('/usuarios/:usuarioId/mascotas', traerMascotasUsuarioController);
 
-router.get('/', function(req, res){
-    res.send('Bienvenido a la API de Franco')
-})
+router.get('/', function (req, res) {
+  res.send('Bienvenido a la API de Franco');
+});
 
-router.post('/crear-trabajador', async function(req, res){
+router.post('/crear-trabajador', async function (req, res) {
   const data = req.body;
   const { nombres, apellidos, correo, especialidad, rut, contrasena } = data;
 
@@ -34,37 +38,33 @@ router.post('/crear-trabajador', async function(req, res){
   res.json(respuestaCrear);
 });
 
-router.post('/trabajador', async function(req, res) {
-  const { correo, contrasena } = req.body; 
+router.post('/trabajador', async function (req, res) {
+  const { correo, contrasena } = req.body;
 
   const respuestaObtener = await obtenerTrabajador(correo, contrasena);
 
   if (respuestaObtener) {
-      res.json({ existe: true }); 
-  } else {  
-      res.json({ existe: false }); 
+    res.json({ existe: true });
+  } else {
+    res.json({ existe: false });
   }
 });
 
-router.get('/reserva-detallada',obtenerReservaConDetalles);
+router.get('/reserva-detallada', obtenerReservaConDetalles);
 
-router.get('/usuario/:usuarioId/reservas', obtenerReservasPorUsuario );
-router.get('/doctor/:doctorId/reservas', obtenerReservasPorDoctor );
+router.get('/usuario/:usuarioId/reservas', obtenerReservasPorUsuario);
+router.get('/doctor/:doctorId/reservas', obtenerReservasPorDoctor);
 
-
-router.post('/crear', async function(req, res){
+router.post('/crear', async function (req, res) {
   const data = req.body;
   const respuestaCrear = await crearUsuario(data);
   res.json(respuestaCrear);
-  
 });
 
-
-router.post('/usuario', async function(req, res) {
+router.post('/usuario', async function (req, res) {
   const { correo, contraseña } = req.body;
 
   try {
-
     const usuario = await Usuario.findOne({ correo, contrasena: contraseña });
 
     if (usuario) {
@@ -78,49 +78,36 @@ router.post('/usuario', async function(req, res) {
   }
 });
 
-router.post('/doctors', async function(req, res){
-    const {nombres, apellidos, correo, especialidad, rut} = req.body;
-  
-    const respuestaCrear = await createDoctor(nombres, apellidos, correo, especialidad, rut)
-    res.json(respuestaCrear)
-  })
-  
-  router.get('/doctors', async function(req, res) {
-    const respuestaObtener = await getDoctors();
-  
-    res.json(respuestaObtener);
-  });
+router.post('/doctors', async function (req, res) {
+  const { nombres, apellidos, correo, especialidad, rut } = req.body;
 
-  router.post('/reservations', async function(req, res) {
-    const body = req.body;
-    const respuestaCrear = await createReservation(body);
-    res.json(respuestaCrear);
-  });
-  
-  router.get('/reservations-doctor-details', async function(req, res) {
-    try {
-      const userId = req.query.userId;
-      const reservations = await getReservationsWithDetails(userId);
-      res.json(reservations);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  });
-  
-
-  router.post('/medical-records', async function(req, res){
-  const {animalId, visitDate, description} = req.body;
-
-  const record = await createMedicalRecord(animalId, visitDate, description);
-  res.json(record);
+  const respuestaCrear = await createDoctor(nombres, apellidos, correo, especialidad, rut);
+  res.json(respuestaCrear);
 });
 
-router.get('/medical-records/animalId', async function(req, res) {
-  const {animalId} = req.params;
+router.get('/doctors', async function (req, res) {
+  const respuestaObtener = await getDoctors();
 
-  const records = await getMedicalRecords(animalId);
-  res.json(records);
+  res.json(respuestaObtener);
 });
 
+router.post('/reservations', async function (req, res) {
+  const body = req.body;
+  const respuestaCrear = await createReservation(body);
+  res.json(respuestaCrear);
+});
+
+router.get('/reservations-doctor-details', async function (req, res) {
+  try {
+    const userId = req.query.userId;
+    const reservations = await getReservationsWithDetails(userId);
+    res.json(reservations);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.get('/doctor/:id/medical-records', traerHistorialMedicoController);
+router.put('/reserva/:id/descripcion', agregarDescripcionAReservaController);
 
 module.exports = router;

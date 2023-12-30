@@ -1,4 +1,10 @@
-const { getReservationsWithDetails, traerReservasPorUsuario, traerReservasPorDoctor } = require('../models/reservation');
+const {
+  getReservationsWithDetails,
+  traerReservasPorUsuario,
+  traerReservasPorDoctor,
+  traerHistorialMedico,
+  agregarDescripcionAReserva,
+} = require('../models/reservation');
 
 async function obtenerReservaConDetalles(req, res) {
   try {
@@ -12,7 +18,7 @@ async function obtenerReservaConDetalles(req, res) {
 
 async function obtenerReservasPorUsuario(req, res) {
   try {
-    const {usuarioId} = req.params;
+    const { usuarioId } = req.params;
     const reservations = await traerReservasPorUsuario(usuarioId);
     res.json(reservations);
   } catch (error) {
@@ -22,7 +28,7 @@ async function obtenerReservasPorUsuario(req, res) {
 
 async function obtenerReservasPorDoctor(req, res) {
   try {
-    const {doctorId} = req.params;
+    const { doctorId } = req.params;
     const reservations = await traerReservasPorDoctor(doctorId);
     res.json(reservations);
   } catch (error) {
@@ -30,4 +36,31 @@ async function obtenerReservasPorDoctor(req, res) {
   }
 }
 
-module.exports = { obtenerReservaConDetalles, obtenerReservasPorUsuario, obtenerReservasPorDoctor };
+async function traerHistorialMedicoController(req, res) {
+  try {
+    const { id } = req.params;
+    const medicalHistory = await traerHistorialMedico(id);
+    res.json(medicalHistory);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+async function agregarDescripcionAReservaController(req, res) {
+  try {
+    const { id } = req.params;
+    const { descripcion } = req.body;
+    const medicalHistory = await agregarDescripcionAReserva(id, descripcion);
+    res.json(medicalHistory);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+module.exports = {
+  obtenerReservaConDetalles,
+  obtenerReservasPorUsuario,
+  obtenerReservasPorDoctor,
+  traerHistorialMedicoController,
+  agregarDescripcionAReservaController,
+};

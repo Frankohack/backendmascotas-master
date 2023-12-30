@@ -17,7 +17,12 @@ const reservationSchema = new mongoose.Schema({
     hora: {
         type: Date,
         required: true
-    },   
+    },
+    // fecha de creacion de la reserva
+    descripcion: {
+        type: String,
+        required: false
+    }
 });
 
 const Reservation = mongoose.model('Reservation', reservationSchema);
