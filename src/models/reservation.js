@@ -28,7 +28,32 @@ async function getReservationsWithDetails() { // para recuperar las reservas que
   return reservations; 
 }
 
-module.exports = { createReservation, getReservationsWithDetails };
+async function traerReservasPorUsuario(idUsuario) {
+  const reservations = await Reservation.findOne({ userId: idUsuario })
+    .populate('doctorId')
+    .populate('userId')
+    .populate('mascotaId');
+  return reservations; 
+}
+
+async function traerReservasPorDoctor(idDoctor) {
+  const reservations = await Reservation.find({ doctorId: idDoctor })
+    .populate({
+      path: 'doctorId',
+      select: 'nombres apellidos correo especialidad rut' 
+    })
+    .populate({
+      path: 'userId',
+      select: 'nombres apellidos correo otrosCampos' 
+    })
+    .populate({
+      path: 'mascotaId',
+      select: 'nombre tipo' 
+    });
+  return reservations; 
+}
+
+module.exports = { createReservation, getReservationsWithDetails, traerReservasPorUsuario, traerReservasPorDoctor };
 
 
 

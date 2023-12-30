@@ -4,7 +4,7 @@ const {crearUsuario, obtenerUsuario} = require('../models/usuario')
 const {createReservation, getReservationsWithDetails} = require('../models/reservation')
 const { createTrabajador, obtenerTrabajador } = require('../models/trabajador');
 const {createMedicalRecord, getMedicalRecords} = require('../models/MedicalRecord');
-const {obtenerReservaConDetalles} = require('../controller/reservationController');
+const {obtenerReservaConDetalles, obtenerReservasPorUsuario} = require('../controller/reservation.controller');
 const { traerMascotasUsuarioController } = require('../controller/mascotas');
 const router = new Router()
 
@@ -46,6 +46,8 @@ router.post('/trabajador', async function(req, res) {
 });
 
 router.get('/reserva-detallada',obtenerReservaConDetalles);
+
+router.get('/usuario/:usuarioId/reservas', obtenerReservasPorUsuario );
 
 
 router.post('/crear', async function(req, res){
