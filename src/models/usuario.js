@@ -1,18 +1,7 @@
 const Usuario = require('../schemas/usuario'); 
 
 async function crearUsuario(datosUsuario) {
-  const mascotasData = datosUsuario.mascotas;
-  delete datosUsuario.mascotas;
-
-  const usuario = new Usuario(datosUsuario);
-
-  usuario.mascotas = mascotasData.map(mascotaData => ({
-    nombreMascota: mascotaData.nombre,
-    tipoAnimal: mascotaData.tipo,
-  }));
-
-  await usuario.save();
-
+  const usuario = await Usuario.create(datosUsuario);
   return usuario;
 }
 
