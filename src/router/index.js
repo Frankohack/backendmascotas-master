@@ -5,7 +5,7 @@ const {createReservation, getReservationsWithDetails} = require('../models/reser
 const { createTrabajador, obtenerTrabajador } = require('../models/trabajador');
 const {createMedicalRecord, getMedicalRecords} = require('../models/MedicalRecord');
 const {obtenerReservaConDetalles} = require('../controller/reservationController');
-const Usuario = require('../schemas/usuario'); 
+const { traerMascotasUsuarioController } = require('../controller/mascotas');
 const router = new Router()
 
 router.post('/login', async function(req, res) {
@@ -19,16 +19,7 @@ router.post('/login', async function(req, res) {
   }
 });
 
-router.get('/usuarios/:usuarioId/mascotas', async function(req, res) {
-  const { usuarioId } = req.params;
-
-  try {
-    const usuario = await Usuario.findById(usuarioId).populate('mascotas');
-    res.json(usuario.mascotas);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+router.get('/usuarios/:usuarioId/mascotas', traerMascotasUsuarioController);
 
 router.get('/', function(req, res){
     res.send('Bienvenido a la API de Franco')
