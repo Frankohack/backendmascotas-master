@@ -68,9 +68,9 @@ router.post('/usuario', async function(req, res) {
     const usuario = await Usuario.findOne({ correo, contrasena: contraseña });
 
     if (usuario) {
-      res.json({ existe: true });
+      res.json({ id: usuario._id });
     } else {
-      res.json({ existe: false });
+      res.json(null);
     }
   } catch (error) {
     console.error('Error al verificar usuario:', error);
