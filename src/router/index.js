@@ -6,6 +6,7 @@ const { createTrabajador, obtenerTrabajador } = require('../models/trabajador');
 const {createMedicalRecord, getMedicalRecords} = require('../models/MedicalRecord');
 const {obtenerReservaConDetalles, obtenerReservasPorUsuario, obtenerReservasPorDoctor} = require('../controller/reservation.controller');
 const { traerMascotasUsuarioController } = require('../controller/mascotas');
+const Usuario = require('../schemas/usuario');
 const router = new Router()
 
 router.post('/login', async function(req, res) {
