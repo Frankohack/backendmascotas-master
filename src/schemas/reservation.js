@@ -11,7 +11,7 @@ const reservationSchema = new mongoose.Schema({
     },
     mascotaId: { // solicitar el id de la mascota
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Mascota'
+        ref: 'Mascotas'
     },
     // fecha con hora de la reserva en formato hora de chile
     hora: {

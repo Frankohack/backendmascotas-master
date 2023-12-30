@@ -29,28 +29,41 @@ async function getReservationsWithDetails() { // para recuperar las reservas que
 }
 
 async function traerReservasPorUsuario(idUsuario) {
-  const reservations = await Reservation.findOne({ userId: idUsuario })
+    const reservations = await Reservation.find({ userId: idUsuario })
     .populate('doctorId')
     .populate('userId')
     .populate('mascotaId');
-  return reservations; 
+
+    const reservationsMap = reservations.map((reservation) => {
+      return {
+        id: reservation._id,
+        usuario: reservation.userId,
+        doctor: reservation.doctorId,
+        mascota: reservation.mascotaId,
+        hora: reservation.hora
+      }
+    });
+    
+  return reservationsMap;
 }
 
 async function traerReservasPorDoctor(idDoctor) {
   const reservations = await Reservation.find({ doctorId: idDoctor })
-    .populate({
-      path: 'doctorId',
-      select: 'nombres apellidos correo especialidad rut' 
-    })
-    .populate({
-      path: 'userId',
-      select: 'nombres apellidos correo otrosCampos' 
-    })
-    .populate({
-      path: 'mascotaId',
-      select: 'nombre tipo' 
+    .populate('doctorId')
+    .populate('userId')
+    .populate('mascotaId');
+    
+    const reservationsMap = reservations.map((reservation) => {
+      return {
+        id: reservation._id,
+        usuario: reservation.userId,
+        doctor: reservation.doctorId,
+        mascota: reservation.mascotaId,
+        hora: reservation.hora
+      }
     });
-  return reservations; 
+    
+  return reservationsMap;
 }
 
 module.exports = { createReservation, getReservationsWithDetails, traerReservasPorUsuario, traerReservasPorDoctor };
