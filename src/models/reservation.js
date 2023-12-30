@@ -1,9 +1,10 @@
 const Reservation = require('../schemas/reservation');
 const Doctor = require('../schemas/doctor');
 
-async function createReservation(doctorId, date) { // crear una reserva recibiendo el id de doctor, y la fecha con .populete 
+async function createReservation(dataReserva) { // crear una reserva recibiendo el id de doctor, y la fecha con .populete 
   try {
-    const respuestaGuardado = await Reservation.create({ doctorId, date });
+    console.log(dataReserva);
+    const respuestaGuardado = await Reservation.create(dataReserva);
     return respuestaGuardado;
   } catch (error) {
     throw new Error(`Error al crear la reserva: ${error.message}`);

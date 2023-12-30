@@ -13,7 +13,11 @@ const reservationSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Mascota'
     },
-    
+    // fecha con hora de la reserva en formato hora de chile
+    hora: {
+        type: Date,
+        required: true
+    },   
 });
 
 const Reservation = mongoose.model('Reservation', reservationSchema);

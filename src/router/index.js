@@ -88,8 +88,8 @@ router.post('/doctors', async function(req, res){
   });
 
   router.post('/reservations', async function(req, res) {
-    const { doctorId, date } = req.body;
-    const respuestaCrear = await createReservation(doctorId, date);
+    const body = req.body;
+    const respuestaCrear = await createReservation(body);
     res.json(respuestaCrear);
   });
   
