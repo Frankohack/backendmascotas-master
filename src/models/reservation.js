@@ -13,19 +13,20 @@ async function createReservation(dataReserva) { // crear una reserva recibiendo 
 
 async function getReservationsWithDetails() { // para recuperar las reservas que estoy creando utilizando el .find() y el .populate
   const reservations = await Reservation.find()
-    .populate({
-      path: 'doctorId',
-      select: 'nombres apellidos correo especialidad rut' 
-    })
-    .populate({
-      path: 'userId',
-      select: 'nombres apellidos correo otrosCampos' 
-    })
-    .populate({
-      path: 'mascotaId',
-      select: 'nombre tipo' 
+    .populate('doctorId')
+    .populate('userId')
+    .populate('mascotaId');
+
+    const reservationsMap = reservations.map((reservation) => {
+      return {
+        id: reservation._id,
+        usuario: reservation.userId,
+        doctor: reservation.doctorId,
+        mascota: reservation.mascotaId,
+        hora: reservation.hora
+      }
     });
-  return reservations; 
+  return reservationsMap;
 }
 
 async function traerReservasPorUsuario(idUsuario) {
@@ -52,7 +53,7 @@ async function traerReservasPorDoctor(idDoctor) {
     .populate('doctorId')
     .populate('userId')
     .populate('mascotaId');
-    
+
     const reservationsMap = reservations.map((reservation) => {
       return {
         id: reservation._id,
