@@ -62,11 +62,10 @@ router.post('/crear', async function (req, res) {
 });
 
 router.post('/usuario', async function (req, res) {
-  const { correo, contraseña } = req.body;
+  const { correo, contrasena } = req.body;
 
   try {
-    const usuario = await Usuario.findOne({ correo, contrasena: contraseña });
-
+    const usuario = await Usuario.findOne({ correo, contrasena });
     if (usuario) {
       res.json({ id: usuario._id });
     } else {

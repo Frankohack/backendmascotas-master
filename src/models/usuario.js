@@ -1,4 +1,4 @@
-const Usuario = require('../schemas/usuario'); 
+const Usuario = require('../schemas/usuario');
 const Mascotas = require('../schemas/mascotas');
 
 async function crearUsuario(datosUsuario) {
@@ -27,4 +27,3 @@ async function obtenerUsuario(user, password) {
 }
 
 module.exports = { crearUsuario, obtenerUsuario };
-
